@@ -2,21 +2,17 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');  
 
 let player = {  
-5 hours ago
 
 Update game.js
     x: canvas.width / 2 - 25, // プレイヤーをキャンバスの中央に配置  
     y: canvas.height - 50, // プレイヤーの高さを考慮  
-5 hours ago
 
 Create game.js
     width: 50,  
     height: 50,  
-5 hours ago
 
 Update game.js
     speed: 20 // プレイヤーの速度  
-5 hours ago
 
 Create game.js
 };  
@@ -24,11 +20,9 @@ Create game.js
 let lasers = [];  
 let enemies = [];  
 let score = 0;  
-5 hours ago
 
 Update game.js
 let gameOver = false; // ゲームオーバーの状態を管理  
-5 hours ago
 
 Create game.js
 
@@ -56,24 +50,16 @@ function shootLaser() {
     lasers.push(laser);  
 }  
 
-5 hours ago
 
-Update game.js
 // 衝突判定  
 function checkCollision() {  
     // レーザーと敵の衝突判定  
-5 hours ago
 
-Create game.js
     for (let i = lasers.length - 1; i >= 0; i--) {  
         for (let j = enemies.length - 1; j >= 0; j--) {  
-5 hours ago
 
-Update game.js
             if (              
-5 hours ago
 
-Create game.js
                 lasers[i].x < enemies[j].x + enemies[j].width &&  
                 lasers[i].x + lasers[i].width > enemies[j].x &&  
                 lasers[i].y < enemies[j].y + enemies[j].height &&  
@@ -87,13 +73,9 @@ Create game.js
         }  
     }  
 
-5 hours ago
 
-Update game.js
     // プレイヤーと敵の衝突判定  
-5 hours ago
 
-Update game.js
     for (let enemy of enemies) {  
         if (  
             player.x < enemy.x + enemy.width &&  
@@ -101,31 +83,21 @@ Update game.js
             player.y < enemy.y + enemy.height &&  
             player.y + player.height > enemy.y  
         ) {  
-5 hours ago
 
-Update game.js
             gameOver = true; // 衝突があった場合はゲームオーバー  
-5 hours ago
 
-Update game.js
             break;  
         }  
     }  
 }  
 
-5 hours ago
 
-Create game.js
 // ゲームの更新  
 function update() {  
-5 hours ago
 
-Update game.js
     if (gameOver) return; // ゲームオーバーの場合は更新しない  
 
-5 hours ago
 
-Create game.js
     lasers.forEach(laser => {  
         laser.y -= laser.speed;  
     });  
@@ -138,13 +110,9 @@ Create game.js
     lasers = lasers.filter(laser => laser.y > 0);  
     enemies = enemies.filter(enemy => enemy.y < canvas.height);  
     
-5 hours ago
 
-Update game.js
     checkCollision();  
-5 hours ago
 
-Create game.js
 }  
 
 // 描画  
@@ -170,3 +138,54 @@ function draw() {
     // スコア表示  
     ctx.fillStyle = 'black';  
     ctx.font = '20px Arial';  
+if (gameOver) {  
+        ctx.fillStyle = 'red';  
+        ctx.font = '40px Arial';  
+        ctx.fillText('ゲームオーバー', canvas.width / 2 - 100, canvas.height / 2);  
+    }  
+
+}  
+
+// ゲームループ  
+function gameLoop() {  
+    update();  
+    draw();  
+    requestAnimationFrame(gameLoop);  
+}  
+
+// イベントリスナー  
+document.addEventListener('keydown', (event) => {  
+    if (event.code === 'Space') {  
+        shootLaser();  
+    }  
+
+    if (gameOver) return; // ゲームオーバーの場合は操作を無視  
+
+
+    if (event.code === 'ArrowLeft' || event.code === 'KeyA') {  
+        player.x -= player.speed; // 左移動  
+        if (player.x < 0) player.x = 0; // 画面外に出ないように  
+    }  
+    if (event.code === 'ArrowRight' || event.code === 'KeyD') {  
+        player.x += player.speed; // 右移動  
+        if (player.x + player.width > canvas.width) player.x = canvas.width - player.width; // 画面外に出ないように  
+    }  
+    if (event.code === 'ArrowUp' || event.code === 'KeyW') {  
+        player.y -= player.speed; // 上移動  
+        if (player.y < 0) player.y = 0; // 画面外に出ないように  
+    }  
+    if (event.code === 'ArrowDown' || event.code === 'KeyS') {  
+        player.y += player.speed; // 下移動  
+        if (player.y + player.height > canvas.height) player.y = canvas.height - player.height; // 画面外に出ないように  
+    }  
+
+});  
+
+// 敵の生成を定期的に行う  
+
+setInterval(createEnemy,
+
+
+// ゲームスタート  
+
+gameLoop();
